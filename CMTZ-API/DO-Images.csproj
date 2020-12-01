@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>CMTZ_API</RootNamespace>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Imageflow.Server" Version="0.4.3" />
+    <PackageReference Include="Imageflow.Server.Storage.S3" Version="0.4.3" />
+  </ItemGroup>
+</Project>
