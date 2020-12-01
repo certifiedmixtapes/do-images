@@ -4,7 +4,7 @@ WORKDIR /source
 
 # copy csproj and restore as distinct layers
 COPY *.sln .
-COPY CMTZ-API/*.csproj ./aspnetapp/
+COPY CMTZ-API/*.csproj ./CMTZ-API/
 RUN dotnet restore
 
 # copy everything else and build app
@@ -17,6 +17,6 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 80
-ENTRYPOINT ["dotnet", "aspnetapp.dll"]
+ENTRYPOINT ["dotnet", "CMTZ-API.dll"]
 
 
