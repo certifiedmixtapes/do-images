@@ -55,10 +55,19 @@ namespace DO_Images
 
             app.UseImageflow(new ImageflowMiddlewareOptions()
                 .SetMapWebRoot(false)
-                .SetMyOpenSourceProjectUrl("https://github.com/my/project"));
+                .SetMyOpenSourceProjectUrl("https://github.com/my/project")
+                .SetDefaultCacheControlString("public, max-age=2592000")
+                );
 
 
             app.UseRouting();
+
+            app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .AllowCredentials()); // allow credentials
+
 
             app.UseAuthorization();
 
