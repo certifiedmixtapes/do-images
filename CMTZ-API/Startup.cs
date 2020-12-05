@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Amazon;
 using Amazon.S3;
 using Imageflow.Server;
+using Imageflow.Server.Storage.RemoteReader;
 using Imageflow.Server.Storage.S3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,13 +35,19 @@ namespace DO_Images
         {
             services.AddCors();
             services.AddControllers();
+
+            services.AddImageflowRemoteReaderService(new RemoteReaderServiceOptions { SigningKey = "", }
+                .AddPrefix("/remote/")
+                );
+
             AmazonS3Config clientConfig = new AmazonS3Config();
             clientConfig.ServiceURL = "https://nyc3.digitaloceanspaces.com";
             clientConfig.SignatureVersion = "v2";
             services.AddImageflowS3Service(new S3ServiceOptions(null, null)
                     .MapPrefix("/do/", clientConfig, "cmtz", "", false, false));
-
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -51,8 +58,15 @@ namespace DO_Images
             }
 
 
-
             app.UseHttpsRedirection();
+
+            /*ImageResizer.Configuration.Config config = new ImageResizer.Configuration.Config();
+            config.setConfigXmlText("<add name=\"RemoteReader\" />");
+            //new ImageResizer.Plugins.RemoteReader.RemoteReaderPlugin().Install(ImageResizer.Configuration.Config.Current);
+            RemoteReaderPlugin plugin = new ImageResizer.Plugins.RemoteReader.RemoteReaderPlugin();
+            plugin.Install(config);
+            plugin.AllowRemoteRequest += Current_AllowRemoteRequest;*/
+
 
             app.UseImageflow(new ImageflowMiddlewareOptions()
                 .SetMapWebRoot(false)
