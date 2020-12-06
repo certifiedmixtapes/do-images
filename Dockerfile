@@ -3,19 +3,20 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /source
 
 # copy csproj and restore as distinct layers
-COPY *.sln .
-COPY CMTZ-API/*.csproj ./CMTZ-API/
-RUN dotnet restore
+#COPY *.sln .
+#COPY CMTZ-API/*.csproj ./CMTZ-API/
+#COPY RemoteReader/*csproj ./RemoteReader/
+#RUN dotnet restore
 
 # copy everything else and build app
-COPY CMTZ-API/. ./CMTZ-API/
-WORKDIR /source/CMTZ-API
-RUN dotnet publish -c release -o /app --no-restore
+COPY . ./
+#WORKDIR /source/CMTZ-API
+RUN dotnet publish CMTZ-API -c release -o app
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build /source/app .
 EXPOSE 80
 ENTRYPOINT ["dotnet", "DO-Images.dll"]
 
